@@ -49,15 +49,15 @@ class Lisp:
             install_and_load_quicklisp(self)
 
         # If backtrace is requested, check prereqs.
-        if ( backtrace and \
-             self.function('CL:FIND-PACKAGE')(Symbol('UIOP', 'KEYWORD')) and \
-             self.function('CL:FBOUNDP')(Symbol('QUIT', 'UIOP')) and \
-             self.function('CL:FBOUNDP')(Symbol('PRINT-CONDITION-BACKTRACE', 'UIOP')) ):
-            pass
-            #print("This lisp has uiop:quit and uiop:print-condition-backtrace functions.")
-        else:
-            # [mpelican:20201123.1824CST] Need LispException?
-            raise Exception("This lisp DOES NOT have uiop:quit and uiop:print-condition-backtrace functions.")
+        if (backtrace):
+            if (self.function('CL:FIND-PACKAGE')(Symbol('UIOP', 'KEYWORD')) and \
+                self.function('CL:FBOUNDP')(Symbol('QUIT', 'UIOP')) and \
+                self.function('CL:FBOUNDP')(Symbol('PRINT-CONDITION-BACKTRACE', 'UIOP')) ):
+                pass
+                #print("This lisp has uiop:quit and uiop:print-condition-backtrace functions.")
+            else:
+                # [mpelican:20201123.1824CST] Need LispException?
+                raise Exception("This lisp DOES NOT have uiop:quit and uiop:print-condition-backtrace functions.")
         
         self._backtrace = backtrace
         self.eval( ('defparameter', 'cl4py::*backtrace*', backtrace) )
